@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mobile Responsiveness & White Theme Automated Verification Suite</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f8fafc; color: #0f172a; }
+    .pass { color: #059669; font-weight: bold; }
+    .fail { color: #dc2626; font-weight: bold; }
+    #log { font-family: monospace; font-size: 14px; white-space: pre-wrap; background: #ffffff; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
+    iframe { border: 1px solid #ccc; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>Mobile Responsiveness & White Theme Automated Verification Suite</h1>
+  <div id="testOutput">Testing in progress...</div>
+  <pre id="log"></pre>
+  <iframe id="testFrame" src="index.html" style="width: 375px; height: 667px;"></iframe>
+
+  <script>
+    const logEl = document.getElementById('log');
+    const outEl = document.getElementById('testOutput');
+    let passes = 0;
+    let fails = 0;
+    const results = [];
+
+    function assert(name, condition, details = '') {
+      if (condition) {
+        passes++;
+        results.push(`PASS: ${name} ${details}`);
+      } else {
+        fails++;
+        results.push(`FAIL: ${name} ${details}`);
+      }
+    }
+
+    async function sleep(ms) {
+      return new Promise(r => setTimeout(r, ms));
+    }
+
+    async function runVerification() {
+      try {
+      const frame = document.getElementById('testFrame');
+      await sleep(500); // Allow frame to initialize
+
+      const fWin = frame.contentWindow;
+      const fDoc = frame.contentDocument;
+
+      logEl.textContent += "Starting White Theme Verification...\n";
+
+      // 1. Check Default Theme on Load
+      const htmlTheme = fDoc.documentElement.getAttribute('data-theme');
+      assert("Initial HTML data-theme is 'light'", htmlTheme === 'light', `(Got: ${htmlTheme})`);
+
+      const bodyBg = fWin.getComputedStyle(fDoc.body).backgroundColor;
+      assert("Body background color is pure white rgb(255, 255, 255)", 
+        bodyBg === 'rgb(255, 255, 255)' || bodyBg === '#ffffff', `(Got: ${bodyBg})`);
+
+      const appTheme = fWin.app.theme;
+      assert("App theme state is 'light'", appTheme === 'light', `(Got: ${appTheme})`);
+
+      const themeBtn = fDoc.getElementById('themeToggleBtn');
+      assert("Theme toggle button shows moon icon in light mode", 
+        themeBtn && themeBtn.innerHTML.includes('🌙'), `(Got: ${themeBtn?.innerHTML})`);
+
+      // 2. Toggle Theme Test
+      fWin.app.toggleTheme();
+      await sleep(60);
+      const toggledTheme = fDoc.documentElement.getAttribute('data-theme');
+      assert("Toggling theme sets data-theme to 'dark'", toggledTheme === 'dark');
+      const toggledBtn = themeBtn.innerHTML;
+      assert("Theme toggle button shows sun icon in dark mode", toggledBtn.includes('☀️'));
+
+      // Switch back to light theme
+      fWin.app.toggleTheme();
+      await sleep(60);
+      assert("Switched back to 'light' theme", fDoc.documentElement.getAttribute('data-theme') === 'light');
+
+      // 3. Viewport Responsiveness Tests across Mobile & Tablet & Desktop
+      const testViewports = [
+        { name: "Android Small (Samsung A-series)", width: 360, height: 800 },
+        { name: "iPhone SE (2nd/3rd gen)", width: 375, height: 667 },
+        { name: "iPhone 14 / 15 / 16", width: 390, height: 844 },
+        { name: "Android Standard (Pixel / S23)", width: 412, height: 915 },
+        { name: "Tablet / iPad Mini", width: 768, height: 1024 },
+        { name: "Desktop Wide", width: 1200, height: 800 }
+      ];
+
+      for (const vp of testViewports) {
+        logEl.textContent += `\nTesting Viewport: ${vp.name} (${vp.width}x${vp.height})...\n`;
+        frame.style.width = vp.width + 'px';
+        frame.style.height = vp.height + 'px';
+        await sleep(100);
+
+        // Check Home View overflow
+        fWin.app.switchView('home');
+        await sleep(100);
+        const homeScrollW = fDoc.documentElement.scrollWidth;
+        const homeClientW = fDoc.documentElement.clientWidth;
+        assert(`${vp.name} Home View has no horizontal overflow`, 
+          homeScrollW <= homeClientW + 1, `(scrollWidth: ${homeScrollW}, clientWidth: ${homeClientW})`);
+
+        // Check mobile hamburger button visibility
+        const menuBtn = fDoc.getElementById('mobileMenuBtn');
+        const menuBtnDisplay = fWin.getComputedStyle(menuBtn).display;
+        if (vp.width <= 768) {
+          assert(`${vp.name} Mobile Menu hamburger button is visible`, 
+            menuBtnDisplay !== 'none', `(display: ${menuBtnDisplay})`);
+        }
+
+        // Test Sidebar Drawer on Mobile
+        if (vp.width <= 768) {
+          const sidebar = fDoc.getElementById('sidebar');
+          menuBtn.click();
+          await sleep(100);
+          assert(`${vp.name} Sidebar opens on hamburger click`, 
+            sidebar.classList.contains('mobile-open'));
+          
+          // Close sidebar via close button
+          const closeBtn = fDoc.getElementById('sidebarCloseBtn');
+          if (closeBtn) {
+            closeBtn.click();
+            await sleep(100);
+            assert(`${vp.name} Sidebar closes on close button click`, 
+              !sidebar.classList.contains('mobile-open'));
+          }
+        }
+
+        // Check Single-Flow Lesson View overflow
+        fWin.app.loadLesson('lesson-1-1');
+        await sleep(150);
+        const lessonScrollW = fDoc.documentElement.scrollWidth;
+        const lessonClientW = fDoc.documentElement.clientWidth;
+        assert(`${vp.name} Lesson View has no horizontal overflow`, 
+          lessonScrollW <= lessonClientW + 1, `(scrollWidth: ${lessonScrollW}, clientWidth: ${lessonClientW})`);
+
+        // Check sequential nav buttons exist and are visible
+        const seqNav = fDoc.querySelector('.lesson-sequential-nav');
+        assert(`${vp.name} Sequential navigation bar rendered`, !!seqNav);
+
+        // Check quiz box exists
+        const quizBox = fDoc.querySelector('.lesson-quiz-box');
+        assert(`${vp.name} Inline Lesson Quiz rendered`, !!quizBox);
+
+        // Check Tools Encyclopedia View
+        fWin.app.switchView('tools');
+        await sleep(100);
+        const toolsScrollW = fDoc.documentElement.scrollWidth;
+        const toolsClientW = fDoc.documentElement.clientWidth;
+        assert(`${vp.name} Tools View has no horizontal overflow`, 
+          toolsScrollW <= toolsClientW + 1, `(scrollWidth: ${toolsScrollW}, clientWidth: ${toolsClientW})`);
+
+        // Check Roadmap View
+        fWin.app.switchView('roadmap');
+        await sleep(100);
+        const roadmapScrollW = fDoc.documentElement.scrollWidth;
+        const roadmapClientW = fDoc.documentElement.clientWidth;
+        assert(`${vp.name} Roadmap View has no horizontal overflow`, 
+          roadmapScrollW <= roadmapClientW + 1, `(scrollWidth: ${roadmapScrollW}, clientWidth: ${roadmapClientW})`);
+
+        // Check Graduation Certificate Responsiveness
+        fWin.showGraduationCertificate();
+        fWin.certHubApp.switchView('certificate');
+        await sleep(150);
+        const certScrollW = fDoc.documentElement.scrollWidth;
+        const certClientW = fDoc.documentElement.clientWidth;
+        assert(`${vp.name} Certificate View has no horizontal overflow`, 
+          certScrollW <= certClientW + 1, `(scrollWidth: ${certScrollW}, clientWidth: ${certClientW})`);
+        
+        // Check founder signature in certificate
+        const certText = fDoc.getElementById('printableCert')?.textContent || '';
+        assert(`${vp.name} Certificate has Founder Eng. Bashar Hafedh signature`, 
+          certText.includes('بشار حافظ') || certText.includes('Bashar Hafedh'));
+
+        fWin.app.closeModal('certificationModal');
+        await sleep(80);
+      }
+
+      // Summary
+      logEl.textContent += "\n" + results.join("\n") + "\n";
+      const summary = `VERIFICATION COMPLETE: ${passes} Passed, ${fails} Failed`;
+      logEl.textContent += `\n${summary}\n`;
+      outEl.innerHTML = `<span class="${fails === 0 ? 'pass' : 'fail'}">${summary}</span>`;
+      window.__verificationDone = true;
+      } catch (err) {
+        logEl.textContent += `\nERROR CAUGHT: ${err.message}\n${err.stack}\n`;
+        outEl.innerHTML = `<span class="fail">ERROR: ${err.message}</span>`;
+      }
+    }
+
+    window.addEventListener('load', runVerification);
+  </script>
+</body>
+</html>

@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light" class="lang-en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>أكاديمية BasharSec للـ SOC | بوابتك العربية لاحتراف الأمن السيبراني من الصفر</title>
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="theme-color" content="#FFFFFF">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- Global Top Navigation Header -->
+    <header class="main-header">
+      <div class="header-left">
+        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Toggle Navigation">☰</button>
+        <div class="brand-badge" onclick="app.switchView('home')" style="cursor: pointer;" title="العودة للرئيسية">
+          <div class="avatar-glow-ring">
+            <span style="font-size: 1.5rem;">🛡️</span>
+          </div>
+          <div class="brand-text-block">
+            <h1 style="font-size: 1.25rem; font-weight: 900; background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;" data-i18n="academyTitle">BasharSec Academy</h1>
+            <div class="brand-greeting">
+              <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;" data-i18n="academySubtitle">أكاديمية عمليات الـ SOC المتكاملة</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Desktop Navigation Links -->
+      <nav class="nav-links-desktop hide-mobile">
+        <button class="nav-link-btn active" data-view="home" onclick="app.switchView('home')" data-i18n="navHome">
+          🏠 الرئيسية
+        </button>
+        <button class="nav-link-btn" data-view="courses" onclick="app.switchView('home'); setTimeout(() => { const el = document.getElementById('coursesCatalogSection'); if(el) el.scrollIntoView({behavior:'smooth'}); }, 100);" data-i18n="navCourses">
+          📚 المسارات والدروس (62)
+        </button>
+        <button class="nav-link-btn" data-view="tools" onclick="app.switchView('tools')" data-i18n="navTools">
+          🧰 موسوعة الأدوات
+        </button>
+        <button class="nav-link-btn" data-view="roadmap" onclick="app.switchView('roadmap')" data-i18n="navRoadmap">
+          🗺️ خارطة الطريق
+        </button>
+        <button class="nav-link-btn" onclick="openWarRoomModal()" style="color: var(--accent-cyan);" data-i18n="navWarRoom">
+          🛡️ غرفة العمليات
+        </button>
+      </nav>
+
+      <!-- Center / Right Controls -->
+      <div class="header-right">
+        <!-- Student Profile Quick Chip -->
+        <div class="student-header-chip" onclick="openStudentAuthModal()" title="تعديل ملف الطالب" data-i18n-title="studentChipTitle">
+          <span class="student-chip-avatar" id="studentChipAvatar">🛡️</span>
+          <span id="studentChipName">طالب الأمن السيبراني</span>
+          <span style="font-size: 0.72rem; color: var(--accent-cyan); margin-inline-start: 4px;">✏️</span>
+        </div>
+
+        <!-- Overall Progress Widget -->
+        <div class="header-progress-widget hide-mobile">
+          <div class="progress-info-compact">
+            <span data-i18n="progressLabel">نسبة الإنجاز</span>
+            <strong id="progressPercentage">0%</strong>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="overallProgressBar" style="width: 0%;"></div>
+          </div>
+          <span id="tierReadinessBadge" class="tier-badge cadet">مبتدئ (Cadet)</span>
+        </div>
+
+        <!-- Search Button -->
+        <button class="btn-icon" onclick="app.openModal('searchModal')" title="البحث السريع في الأكاديمية" data-i18n-title="searchBtnTitle">
+          🔍
+        </button>
+
+        <!-- Theme Toggle (Dark / Light) -->
+        <button id="themeToggleBtn" class="btn-icon" onclick="app.toggleTheme()" title="تبديل المظهر" data-i18n-title="themeToggleTitle">
+          🌙
+        </button>
+
+        <!-- Language Toggle (AR / EN) -->
+        <button id="langToggleBtn" class="btn-pill" onclick="i18n.toggleLanguage()" title="تبديل اللغة" data-i18n-title="langToggleTitle">
+          🌐 العربية
+        </button>
+      </div>
+    </header>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 1: HOME & DASHBOARD VIEW                                             -->
+    <!-- ========================================================================= -->
+    <div id="homeView" class="app-view active-view">
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="hero-glow-orb"></div>
+        <div class="hero-badge-pill">
+          <span>🛡️</span>
+          <span data-i18n="heroBadge">الأكاديمية الأولى عربياً لاحتراف عمليات الـ SOC الميدانية</span>
+        </div>
+        <h1 class="hero-title" data-i18n="heroTitle">
+          أكاديمية <span class="gradient-text">BasharSec</span> | بوابتك العربية لاحتراف تحليل الأمن السيبراني (SOC) من الصفر
+        </h1>
+        <p class="hero-subtitle" data-i18n="heroSubtitle">
+          ما هو مركز العمليات الأمنية (SOC)؟ هو خط الدفاع الأول عن المنشآت الحيوية في العالم. نقدم لك هنا المسار العملي الشامل والمباشر من الصفر المطلق وحتى الجاهزية التامة لسوق العمل مع أكثر من 100 محاكاة وتطبيق وسجل أمني حقيقي.
+        </p>
+        <div class="hero-actions-row">
+          <button class="btn-hero-primary" onclick="app.resumeLearning()" data-i18n="heroStartFree">
+            🚀 ابدأ التعلم مجاناً
+          </button>
+          <button class="btn-hero-secondary" onclick="app.switchView('roadmap')" data-i18n="heroExploreRoadmap">
+            🗺️ استكشف خارطة الطريق
+          </button>
+        </div>
+
+        <!-- Quick Stats Grid -->
+        <div class="hero-stats-grid">
+          <div class="hero-stat-card">
+            <div class="stat-number" data-i18n="statLessonsNum">62</div>
+            <div class="stat-label" data-i18n="statLessonsLabel">درساً تخصصياً ومخبراً عملياً</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="stat-number" data-i18n="statTiersNum">3</div>
+            <div class="stat-label" data-i18n="statTiersLabel">مستويات (مبتدئ / متوسط / متقدم)</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="stat-number" data-i18n="statSimsNum">100+</div>
+            <div class="stat-label" data-i18n="statSimsLabel">تطبيق عملي وسجل جنائي</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="stat-number" data-i18n="statCertNum">100%</div>
+            <div class="stat-label" data-i18n="statCertLabel">شهادة تخرج معتمدة باسمك</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Student Dashboard Banner (أكمل من حيث توقفت) -->
+      <section class="student-resume-banner">
+        <div class="resume-card-inner">
+          <div class="resume-card-left">
+            <div class="resume-avatar-frame">
+              <span id="studentBannerAvatar" style="display:flex; align-items:center; justify-content:center; height:100%; font-size:1.8rem;">🛡️</span>
+            </div>
+            <div>
+              <div class="resume-greeting-title">
+                <span data-i18n="resumeGreetingPrefix">مرحباً بك يا </span><span id="studentBannerName" style="color: var(--accent-cyan);">طالب الأمن السيبراني</span>!
+              </div>
+              <div class="resume-subtext" data-i18n="resumeSubtext">
+                أنت الآن تسير في المسار لاحتراف الـ SOC. واصل تقدمك واقترب من الجاهزية لسوق العمل.
+              </div>
+            </div>
+          </div>
+          <div class="resume-card-actions">
+            <div class="hide-mobile" style="text-align: left; min-width: 140px;">
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; margin-bottom: 4px;">
+                <span data-i18n="resumeProgressLabel">الإنجاز العام:</span> <strong id="bannerProgressPercent" style="color: var(--accent-green);">0%</strong>
+              </div>
+              <div style="height: 6px; background: var(--bg-tertiary); border-radius: 99px; overflow: hidden; width: 140px;">
+                <div id="bannerProgressBar" style="height: 100%; width: 0%; background: var(--brand-gradient);"></div>
+              </div>
+            </div>
+            <button class="btn-resume-cta" onclick="app.resumeLearning()">
+              <span data-i18n="resumeActionPrefix">▶️ متابعة الدراسة:</span>
+              <span id="resumeLastLessonName" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">1.1 ما هو الـ SOC؟</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Courses Catalog Section (12 Courses by 3 Levels) -->
+      <section class="courses-catalog-section" id="coursesCatalogSection">
+        <div class="catalog-header">
+          <h2 data-i18n="catalogTitle">📚 المنهج الاحترافي المتكامل (7 مسارات تخصصية كبرى - 62 درساً متعمقاً)</h2>
+          <p data-i18n="catalogDesc">تم تصميم هذا المنهج وفق أعلى معايير مراكز العمليات العالمية ومصفوفة MITRE ATT&CK، مقسماً إلى 3 مستويات واضحة تناسب الجميع وتغطي كل شاردة وواردة في مجال الـ SOC.</p>
+        </div>
+
+        <!-- 3-Level Filter Buttons -->
+        <div class="level-tabs-bar">
+          <button class="level-filter-btn active" data-level="all" onclick="app.setLevelFilter('all')" data-i18n="filterAll">
+            الجميع (7 مسارات كبرى - 62 درساً)
+          </button>
+          <button class="level-filter-btn beginner" data-level="beginner" onclick="app.setLevelFilter('beginner')" data-i18n="filterBeginner">
+            🟢 المستوى الأول: مبتدئ (3 مسارات - 26 درساً)
+          </button>
+          <button class="level-filter-btn intermediate" data-level="intermediate" onclick="app.setLevelFilter('intermediate')" data-i18n="filterIntermediate">
+            🔵 المستوى الثاني: متوسط (3 مسارات - 24 درساً)
+          </button>
+          <button class="level-filter-btn advanced" data-level="advanced" onclick="app.setLevelFilter('advanced')" data-i18n="filterAdvanced">
+            🟣 المستوى الثالث: متقدم (مسار تخصصي شامل - 12 درساً)
+          </button>
+        </div>
+
+        <!-- Courses Cards Grid -->
+        <div class="courses-grid-layout" id="coursesCatalogGrid">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </section>
+
+      <!-- About Founder Section -->
+      <section class="founder-profile-section">
+        <div class="founder-card-box">
+          <div class="founder-avatar-wrap">
+            <img class="founder-avatar-img" src="images/bashar.jpg" alt="م. بشار حافظ">
+          </div>
+          <div class="founder-text-body">
+            <h3 data-i18n="founderTitle">تأسيس وإشراف: م. بشار حافظ (Eng. Bashar Hafedh)</h3>
+            <span class="founder-title-badge" data-i18n="founderRole">خبير ومهندس عمليات مراكز الأمن السيبراني (Principal SOC Operations Architect)</span>
+            <p class="founder-bio-text" data-i18n="founderBio">
+              تم تأسيس أكاديمية BasharSec برؤية طموحة تهدف إلى سد الفجوة بين التعليم النظري الأكاديمي والواقع الميداني الحقيقي لمراكز العمليات الأمنية (SOC). نقدم لكل طالب عربي محاكاة حقيقية لأحدث تقنيات الـ SIEM، وتحليل السجلات، والتحقيق الجنائي الرقمي، والتعامل مع التهديدات المتقدمة لتمكينهم من اقتناص وظائفهم الميدانية بجدارة وتفوق.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Public Master Footer -->
+      <footer class="site-footer">
+        <div class="footer-glow-line"></div>
+        <div class="footer-content">
+          <div class="footer-brand-section">
+            <div class="footer-avatar-wrap">
+              <img class="footer-avatar-img" src="images/bashar.jpg" alt="المهندس بشار حافظ">
+            </div>
+            <div class="footer-text-wrap">
+              <div class="footer-built-by">
+                <span class="footer-bolt">⚡</span>
+                <span class="footer-credit-text" data-i18n="footerCredit">تأسيس وإشراف: م. بشار حافظ</span>
+              </div>
+              <div class="footer-tagline" data-i18n="footerTagline">أكاديمية BasharSec للأمن السيبراني وعمليات مراكز الـ SOC المتقدمة</div>
+            </div>
+          </div>
+
+          <div class="footer-info-section">
+            <div class="footer-badges">
+              <span class="footer-badge-pill">SOC Academy 2026</span>
+              <span class="footer-badge-pill highlight">Active 24/7/365</span>
+            </div>
+            <div class="footer-rights" data-i18n="footerRights">© 2026 جميع الحقوق محفوظة | أكاديمية BasharSec العامة للطلاب</div>
+          </div>
+
+          <div class="footer-actions-section">
+            <button class="btn-back-top" onclick="app.scrollToTop()" title="العودة لأعلى الصفحة">
+              <span>↑</span>
+              <span data-i18n="footerBackTop">للأعلى</span>
+            </button>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 2: SINGLE-FLOW LESSON READER VIEW                                    -->
+    <!-- ========================================================================= -->
+    <div id="lessonView" class="app-view">
+      <div class="main-layout">
+        <!-- Sidebar Curriculum & Navigation (12 Courses Accordion) -->
+        <aside class="sidebar" id="sidebar">
+          <div class="sidebar-mobile-header">
+            <div class="sidebar-mobile-title">
+              <span>🛡️</span>
+              <span data-i18n="sidebarTitle">منهاج الأكاديمية (62 درساً)</span>
+            </div>
+            <button id="sidebarCloseBtn" class="sidebar-close-btn" aria-label="Close Navigation" onclick="document.getElementById('sidebar').classList.remove('mobile-open')">✕</button>
+          </div>
+
+          <!-- Quick Access Action Buttons -->
+          <div class="sidebar-tools-nav">
+            <button class="tool-quick-btn" onclick="app.switchView('home'); document.getElementById('sidebar').classList.remove('mobile-open');">
+              🏠 <span data-i18n="navHome">الرئيسية</span>
+            </button>
+            <button class="tool-quick-btn special-glow" onclick="openWarRoomModal(); document.getElementById('sidebar').classList.remove('mobile-open');">
+              🛡️ <span data-i18n="sidebarWarRoom">غرفة عمليات الـ SOC</span>
+            </button>
+            <button class="tool-quick-btn" onclick="app.switchView('tools'); document.getElementById('sidebar').classList.remove('mobile-open');">
+              🧰 <span data-i18n="sidebarTools">موسوعة الأدوات</span>
+            </button>
+            <button class="tool-quick-btn" onclick="app.switchView('roadmap'); document.getElementById('sidebar').classList.remove('mobile-open');">
+              🗺️ <span data-i18n="sidebarRoadmap">خارطة الطريق</span>
+            </button>
+            <button class="tool-quick-btn" onclick="showGraduationCertificate(); document.getElementById('sidebar').classList.remove('mobile-open');">
+              🎓 <span data-i18n="sidebarCert">شهادة التخرج والامتحان</span>
+            </button>
+            <button class="tool-quick-btn" onclick="app.openModal('terminalModal'); document.getElementById('sidebar').classList.remove('mobile-open');">
+              💻 <span data-i18n="sidebarTerminal">المحاكي الطرفي</span>
+            </button>
+            <button class="tool-quick-btn" onclick="app.openModal('triageModal'); document.getElementById('sidebar').classList.remove('mobile-open');">
+              🎯 <span data-i18n="sidebarTriage">مركز الفرز</span>
+            </button>
+            <button class="tool-quick-btn" onclick="app.openModal('osintModal'); document.getElementById('sidebar').classList.remove('mobile-open');">
+              🌐 <span data-i18n="sidebarOsint">فاحص IOCs</span>
+            </button>
+          </div>
+
+          <!-- Curriculum Header -->
+          <div class="sidebar-curriculum-header">
+            <span data-i18n="sidebarCurriculumHeader">المسار التعليمي الشامل (7 مسارات - 62 درساً)</span>
+          </div>
+          <div id="modulesSidebarList">
+            <!-- Populated dynamically by app.js -->
+          </div>
+        </aside>
+
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Single-Flow Content Area -->
+        <main class="content-area" id="mainContentArea">
+          <div class="single-flow-wrapper">
+            <!-- Lesson Header & Breadcrumbs -->
+            <div class="lesson-top-meta">
+              <div class="lesson-breadcrumbs-bar" id="activeStageBreadcrumb">
+                <span>الرئيسية</span> &gt; <span>الكورس 1</span> &gt; <span>الدرس 1.1</span>
+              </div>
+              <h2 class="lesson-main-heading" id="activeLessonTitle">1.1 ما هو مركز العمليات الأمنية (SOC)؟</h2>
+              <div class="lesson-status-strip">
+                <span class="lesson-status-pill" id="lessonCompletedStatus" style="display: none;">تم إكمال هذا الدرس بنجاح ✓</span>
+                <span id="activeLessonDuration" style="font-size: 0.88rem; color: var(--text-dim); font-weight: 700;">⏱ 45 min</span>
+              </div>
+            </div>
+
+            <!-- Single Flow Container: Theory ➔ Immediate Hands-On Lab Simulator ➔ Quick Quiz -->
+            <div id="singleFlowLessonContainer">
+              <!-- Rendered dynamically by app.js -->
+            </div>
+
+            <!-- Sequential Navigation Bar (⬅️ الدرس السابق | ✅ أتممت | التالي ➡️) -->
+            <div class="lesson-sequential-nav">
+              <button id="btnQuickPrev" class="btn-seq-nav prev" data-i18n="btnPrevLesson">
+                ← الدرس السابق
+              </button>
+              <button id="btnMarkCompleteSeq" class="btn-seq-nav complete" data-i18n="btnMarkComplete">
+                ✅ أتممت هذا الدرس
+              </button>
+              <button id="btnQuickNext" class="btn-seq-nav next" data-i18n="btnNextLesson">
+                الدرس التالي →
+              </button>
+            </div>
+          </div>
+
+          <!-- Lesson View Footer -->
+          <footer class="site-footer">
+            <div class="footer-glow-line"></div>
+            <div class="footer-content">
+              <div class="footer-brand-section">
+                <div class="footer-avatar-wrap">
+                  <img class="footer-avatar-img" src="images/bashar.jpg" alt="م. بشار حافظ">
+                </div>
+                <div class="footer-text-wrap">
+                  <div class="footer-built-by">
+                    <span class="footer-bolt">⚡</span>
+                    <span class="footer-credit-text" data-i18n="footerCredit">تأسيس وإشراف: م. بشار حافظ</span>
+                  </div>
+                  <div class="footer-tagline" data-i18n="footerTagline">أكاديمية BasharSec للأمن السيبراني وعمليات مراكز الـ SOC المتقدمة</div>
+                </div>
+              </div>
+              <div class="footer-info-section">
+                <div class="footer-rights" data-i18n="footerRights">© 2026 جميع الحقوق محفوظة | أكاديمية BasharSec العامة للطلاب</div>
+              </div>
+              <div class="footer-actions-section">
+                <button class="btn-back-top" onclick="app.scrollToTop()">
+                  <span data-i18n="footerBackTop">↑ للأعلى</span>
+                </button>
+              </div>
+            </div>
+          </footer>
+        </main>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 3: SOC TOOLS & COMMANDS ENCYCLOPEDIA                                  -->
+    <!-- ========================================================================= -->
+    <div id="toolsView" class="app-view">
+      <div class="tools-encyclopedia-wrap">
+        <div class="tools-encyclopedia-header">
+          <h2 data-i18n="toolsHeaderTitle">🧰 موسوعة أدوات الـ SOC وأوامرها الميدانية</h2>
+          <p data-i18n="toolsHeaderDesc">دليلك الشامل لأهم 11 أداة ونظاماً يُستخدم يومياً في مراكز العمليات الأمنية (Wireshark, Splunk, Wazuh, Sysmon, Nmap, Snort, Zeek, Tcpdump, PowerShell, Linux CLI, Volatility) مع شروحاتها وجداول أوامرها وخاصية النسخ السريع.</p>
+        </div>
+
+        <div class="tools-filter-search-bar">
+          <div class="tools-search-box">
+            <input type="text" id="toolSearchInput" class="search-field" placeholder="ابحث عن أداة، أمر معين، أو فلتر (مثل Splunk, Wireshark, Sysmon)..." data-i18n-placeholder="toolsSearchPlaceholder" oninput="app.renderToolsEncyclopedia(this.value)">
+          </div>
+          <div class="tool-category-pills">
+            <button class="tool-cat-btn active" data-cat="all" onclick="app.setToolCategoryFilter('all')" data-i18n="toolsCatAll">الكل (11 أداة)</button>
+            <button class="tool-cat-btn" data-cat="Network Forensics" onclick="app.setToolCategoryFilter('Network Forensics')" data-i18n="toolsCatNetwork">تحليل الشبكة</button>
+            <button class="tool-cat-btn" data-cat="SIEM & Analytics" onclick="app.setToolCategoryFilter('SIEM & Analytics')" data-i18n="toolsCatSiem">أنظمة الـ SIEM</button>
+            <button class="tool-cat-btn" data-cat="Endpoint Telemetry" onclick="app.setToolCategoryFilter('Endpoint Telemetry')" data-i18n="toolsCatEndpoint">النقاط الطرفية</button>
+            <button class="tool-cat-btn" data-cat="Memory Forensics" onclick="app.setToolCategoryFilter('Memory Forensics')" data-i18n="toolsCatMemory">الذاكرة الجنائية</button>
+          </div>
+        </div>
+
+        <!-- Tools List Container -->
+        <div id="toolsEncyclopediaList">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </div>
+
+      <!-- Public Master Footer -->
+      <footer class="site-footer">
+        <div class="footer-glow-line"></div>
+        <div class="footer-content">
+          <div class="footer-brand-section">
+            <div class="footer-avatar-wrap">
+              <img class="footer-avatar-img" src="images/bashar.jpg" alt="المهندس بشار حافظ">
+            </div>
+            <div class="footer-text-wrap">
+              <div class="footer-built-by">
+                <span class="footer-bolt">⚡</span>
+                <span class="footer-credit-text" data-i18n="footerCredit">تأسيس وإشراف: م. بشار حافظ</span>
+              </div>
+              <div class="footer-tagline" data-i18n="footerTagline">أكاديمية BasharSec للأمن السيبراني وعمليات مراكز الـ SOC المتقدمة</div>
+            </div>
+          </div>
+          <div class="footer-actions-section">
+            <button class="btn-back-top" onclick="app.scrollToTop()">
+              <span data-i18n="footerBackTop">↑ للأعلى</span>
+            </button>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 4: INTERACTIVE SOC ROADMAP & CAREER                                  -->
+    <!-- ========================================================================= -->
+    <div id="roadmapView" class="app-view">
+      <div class="roadmap-wrap">
+        <div class="roadmap-header">
+          <h2 data-i18n="roadmapTitle">🗺️ مرشد خارطة طريق الـ SOC الشاملة (Interactive Roadmap)</h2>
+          <p data-i18n="roadmapDesc">مسارك التدريجي الواضح من الصفر المطلق وحتى احتراف سوق العمل، وماذا تدرس في كل محطة، والشهادات العالمية المعتمدة وطرق الاستعداد للمقابلات.</p>
+        </div>
+
+        <!-- 6 Progressive Steps Timeline -->
+        <div class="roadmap-timeline-steps" id="roadmapTimelineList">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+        <!-- Global Certifications Hub Section -->
+        <div class="cert-guide-section">
+          <h3 data-i18n="roadmapCertsTitle">🎓 دليل الشهادات العالمية المعتمدة في الأمن السيبراني</h3>
+          <div class="certs-cards-grid" id="roadmapCertsGrid">
+            <!-- Rendered dynamically by app.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Public Master Footer -->
+      <footer class="site-footer">
+        <div class="footer-glow-line"></div>
+        <div class="footer-content">
+          <div class="footer-brand-section">
+            <div class="footer-avatar-wrap">
+              <img class="footer-avatar-img" src="images/bashar.jpg" alt="المهندس بشار حافظ">
+            </div>
+            <div class="footer-text-wrap">
+              <div class="footer-built-by">
+                <span class="footer-bolt">⚡</span>
+                <span class="footer-credit-text" data-i18n="footerCredit">تأسيس وإشراف: م. بشار حافظ</span>
+              </div>
+              <div class="footer-tagline" data-i18n="footerTagline">أكاديمية BasharSec للأمن السيبراني وعمليات مراكز الـ SOC المتقدمة</div>
+            </div>
+          </div>
+          <div class="footer-actions-section">
+            <button class="btn-back-top" onclick="app.scrollToTop()">
+              <span data-i18n="footerBackTop">↑ للأعلى</span>
+            </button>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODALS SYSTEM                                                             -->
+  <!-- ========================================================================= -->
+
+  <!-- Student Auth / Profile Edit Modal -->
+  <div class="modal-overlay" id="studentAuthModal">
+    <div class="modal-dialog" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 data-i18n="studentAuthTitle">👤 بوابة الطالب والملف الشخصي</h3>
+        <button class="btn-close-modal" onclick="app.closeModal('studentAuthModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-muted); margin-bottom: 1.25rem; font-size: 0.95rem;" data-i18n="studentAuthDesc">
+          سجّل بياناتك لتحفظ تقدمك في المنهاج وتصدر شهادات التخرج والامتحانات باسمك الرسمي:
+        </p>
+        
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main);" data-i18n="studentAuthNameLabel">اسم الطالب الثلاثي / الثنائي:</label>
+          <input type="text" id="authStudentName" class="search-field" placeholder="مثال: أحمد عبد الله أو سارة محمد" data-i18n-placeholder="studentAuthNamePlaceholder" value="">
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main);" data-i18n="studentAuthEmailLabel">البريد الإلكتروني:</label>
+          <input type="email" id="authStudentEmail" class="search-field" placeholder="student@example.com" data-i18n-placeholder="studentAuthEmailPlaceholder" value="">
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main);" data-i18n="studentAuthAvatarLabel">اختر صورتك الرمزية (Avatar):</label>
+          <div class="avatar-selection-grid" id="avatarSelectionGrid">
+            <button type="button" class="avatar-choice-btn selected" data-avatar="🛡️" onclick="selectAvatar('🛡️', this)">🛡️</button>
+            <button type="button" class="avatar-choice-btn" data-avatar="👨‍💻" onclick="selectAvatar('👨‍💻', this)">👨‍💻</button>
+            <button type="button" class="avatar-choice-btn" data-avatar="👩‍💻" onclick="selectAvatar('👩‍💻', this)">👩‍💻</button>
+            <button type="button" class="avatar-choice-btn" data-avatar="🕵️" onclick="selectAvatar('🕵️', this)">🕵️</button>
+            <button type="button" class="avatar-choice-btn" data-avatar="⚡" onclick="selectAvatar('⚡', this)">⚡</button>
+            <button type="button" class="avatar-choice-btn" data-avatar="🎯" onclick="selectAvatar('🎯', this)">🎯</button>
+          </div>
+          <input type="hidden" id="selectedAvatarValue" value="🛡️">
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+          <button class="btn-secondary" onclick="app.closeModal('studentAuthModal')" data-i18n="studentAuthCancelBtn">إلغاء</button>
+          <button class="btn-primary-glow" onclick="handleSaveStudentAuth()" data-i18n="studentAuthSaveBtn">حفظ وتفعيل الملف ✓</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Modal -->
+  <div class="modal-overlay" id="searchModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 data-i18n="searchModalTitle">🔍 البحث السريع في الأكاديمية</h3>
+        <button class="btn-close-modal" onclick="app.closeModal('searchModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="search-input-wrapper">
+          <input type="text" id="globalSearchInput" class="search-field" placeholder="ابحث في الدروس، الأوامر، المفاهيم، والـ Event IDs..." data-i18n-placeholder="searchPlaceholder" oninput="app.performSearch(this.value)">
+        </div>
+        <div class="search-results-list" id="searchResultsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Standalone Cyber Terminal Modal -->
+  <div class="modal-overlay" id="terminalModal">
+    <div class="modal-dialog" style="max-width: 900px;">
+      <div class="modal-header">
+        <h3 data-i18n="terminalModalTitle">💻 المحاكي الطرفي الشامل (Interactive SOC Terminal CLI)</h3>
+        <button class="btn-close-modal" onclick="app.closeModal('terminalModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="interactive-terminal-box" style="margin: 0;">
+          <div class="terminal-bar">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="terminal-title">BasharSec Cyber Operations Console (Type 'help' for commands)</span>
+          </div>
+          <div class="terminal-body" id="standalone-term-body" style="height: 340px;">
+            <div class="term-line output">BasharSec Command Shell v3.0. Type 'help' to view available commands.</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:0.5rem; margin-top: 1rem;">
+          <input type="text" id="modalTermInput" class="search-field" placeholder="اكتب أمراً هنا (ping, nmap, splunk-search, wireshark, etc)..." data-i18n-placeholder="terminalPlaceholder" onkeydown="if(event.key==='Enter'){ runSimCommand(this.value, 'standalone-term-body'); this.value=''; }">
+          <button class="btn-primary-glow" onclick="const input = document.getElementById('modalTermInput'); runSimCommand(input.value, 'standalone-term-body'); input.value='';" data-i18n="terminalRunBtn">تنفيذ</button>
+        </div>
+        <div class="quick-commands" style="margin-top: 0.75rem;">
+          <button class="btn-cmd" onclick="runSimCommand('help', 'standalone-term-body')">help</button>
+          <button class="btn-cmd" onclick="runSimCommand('ping 10.0.0.5', 'standalone-term-body')">ping</button>
+          <button class="btn-cmd" onclick="runSimCommand('netstat -ano', 'standalone-term-body')">netstat</button>
+          <button class="btn-cmd" onclick="runSimCommand('klist', 'standalone-term-body')">klist</button>
+          <button class="btn-cmd" onclick="runSimCommand('cat /var/log/auth.log', 'standalone-term-body')">auth.log</button>
+          <button class="btn-cmd" onclick="runSimCommand('mitre-lookup T1059', 'standalone-term-body')">mitre-lookup</button>
+          <button class="btn-cmd" onclick="runSimCommand('clear', 'standalone-term-body')">clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOC Alert Triage Simulator Modal -->
+  <div class="modal-overlay" id="triageModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 data-i18n="triageModalTitle">🎯 مركز فرز حوادث الـ SOC (Alert Triage Simulator)</h3>
+        <button class="btn-close-modal" onclick="app.closeModal('triageModal')">✕</button>
+      </div>
+      <div class="modal-body" id="triageModalBody">
+        <p style="margin-bottom: 1rem; color: var(--text-muted);" data-i18n="triagePrompt">
+          اختبر مهارتك اليومية: هل التنبيه هجوم حقيقي (True Positive) أم إنذار خاطئ مشروع (False Positive)؟
+        </p>
+        <div id="triageCaseContainer">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OSINT Threat Intel Scanner Modal -->
+  <div class="modal-overlay" id="osintModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 data-i18n="osintModalTitle">🌐 أداة فحص المؤشرات الخبيثة (OSINT / Threat Intel)</h3>
+        <button class="btn-close-modal" onclick="app.closeModal('osintModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--text-muted); margin-bottom: 1rem;" data-i18n="osintDesc">
+          افحص العناوين، الروابط، وبصمات الـ Hashes عبر محاكي استخبارات التهديدات العالمية.
+        </p>
+        <div style="display:flex; gap:0.5rem; margin-bottom: 1.25rem;">
+          <input type="text" id="osintInputField" class="search-field" placeholder="185.220.101.5 أو evil-domain.xyz..." value="185.220.101.5">
+          <button class="btn-primary-glow" onclick="executeOsintLookup()" data-i18n="osintLookupBtn">فحص (Lookup)</button>
+        </div>
+        <div id="osintResultCard" style="display:none; background: var(--bg-tertiary); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live SOC War Room & SIEM Queue Modal -->
+  <div class="modal-overlay" id="warRoomModal">
+    <div class="modal-dialog" style="max-width: 1200px; width: 95vw;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap: 0.75rem;">
+          <h3 data-i18n="warRoomModalTitle">غرفة عمليات الـ SOC المتقدمة (SIEM & Ticketing Queue)</h3>
+          <span class="badge-pill" style="background: rgba(0, 243, 255, 0.15); color: var(--accent-cyan); font-weight:bold; font-size:0.75rem; padding: 2px 8px; border-radius: 4px;" data-i18n="founderBadge">
+            تأسيس: م. بشار حافظ
+          </span>
+        </div>
+        <button class="btn-close-modal" onclick="app.closeModal('warRoomModal')">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 1rem;">
+        <div class="war-room-layout">
+          <!-- Left: Alert Queue Panel -->
+          <div class="war-queue-panel">
+            <div class="war-queue-header">
+              <div class="war-queue-header-top">
+                <strong data-i18n="warRoomQueueTitle">🚨 طابور التنبيهات الأمنية</strong>
+                <span id="warRoomResolvedCount" class="badge-pill" style="background: rgba(0,255,136,0.15); color: var(--accent-green); font-size:0.72rem; padding: 2px 6px; border-radius: 4px;">0 / 5</span>
+              </div>
+              <div class="war-filter-pills">
+                <button class="war-filter-btn active" onclick="warRoomApp.setFilter('ALL'); document.querySelectorAll('.war-filter-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');" data-i18n="warFilterAll">الكل</button>
+                <button class="war-filter-btn" onclick="warRoomApp.setFilter('CRITICAL'); document.querySelectorAll('.war-filter-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');" data-i18n="warFilterCritical">حرج</button>
+                <button class="war-filter-btn" onclick="warRoomApp.setFilter('HIGH'); document.querySelectorAll('.war-filter-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');" data-i18n="warFilterHigh">عالي</button>
+                <button class="war-filter-btn" onclick="warRoomApp.setFilter('MEDIUM'); document.querySelectorAll('.war-filter-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');" data-i18n="warFilterMedium">متوسط</button>
+                <button class="war-filter-btn" onclick="warRoomApp.setFilter('LOW'); document.querySelectorAll('.war-filter-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');" data-i18n="warFilterLow">منخفض</button>
+              </div>
+            </div>
+            <div class="war-queue-list" id="warRoomQueueList">
+              <!-- Populated by war_room.js -->
+            </div>
+          </div>
+
+          <!-- Right: Active Investigation Pane -->
+          <div class="war-investigation-pane" id="warRoomInvestigationPane">
+            <!-- Populated by war_room.js -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BCSA Certification Hub & Final Exam Modal -->
+  <div class="modal-overlay" id="certificationModal">
+    <div class="modal-dialog" style="max-width: 1050px; width: 95vw;">
+      <div class="modal-header">
+        <h3 data-i18n="certModalTitle">🎓 شهادة التخرج والامتحان النهائي المعتمد (BCSA Certification Hub)</h3>
+        <button class="btn-close-modal" onclick="app.closeModal('certificationModal')">✕</button>
+      </div>
+      <div class="modal-body" id="certificationHubBody" style="padding: 1.5rem;">
+        <!-- Rendered by certification.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Core JavaScript Data & Logic Modules -->
+  <script src="data/translations.js" charset="UTF-8"></script>
+  <script src="data/cheat_sheets_data.js" charset="UTF-8"></script>
+  <script src="data/war_room_data.js" charset="UTF-8"></script>
+  <script src="data/exam_data.js" charset="UTF-8"></script>
+  <script src="data/courses_data.js" charset="UTF-8"></script>
+  <script src="data/courses_level2.js" charset="UTF-8"></script>
+  <script src="data/courses_level3.js" charset="UTF-8"></script>
+  <script src="data/modules_index.js" charset="UTF-8"></script>
+  <script src="data/tools_data.js" charset="UTF-8"></script>
+  <script src="data/roadmap_data.js" charset="UTF-8"></script>
+
+  <script src="js/i18n.js" charset="UTF-8"></script>
+  <script src="js/terminal.js" charset="UTF-8"></script>
+  <script src="js/triage.js" charset="UTF-8"></script>
+  <script src="js/osint_tool.js" charset="UTF-8"></script>
+  <script src="js/war_room.js" charset="UTF-8"></script>
+  <script src="js/cheat_sheets.js" charset="UTF-8"></script>
+  <script src="js/certification.js" charset="UTF-8"></script>
+  <script src="js/app.js" charset="UTF-8"></script>
+
+  <script>
+    // Search Implementation Hook
+    app.performSearch = function(query) {
+      const container = document.getElementById('searchResultsList');
+      if (!container) return;
+      const q = query.trim().toLowerCase();
+      if (!q) {
+        container.innerHTML = '';
+        return;
+      }
+
+      const isEn = typeof i18n !== 'undefined' && i18n.currentLang === 'en';
+      const all = getAllLessons();
+      const matches = all.filter(l => {
+        return (l.titleAr && l.titleAr.toLowerCase().includes(q)) ||
+               (l.titleEn && l.titleEn.toLowerCase().includes(q)) ||
+               (l.theoryAr && l.theoryAr.toLowerCase().includes(q));
+      });
+
+      if (matches.length === 0) {
+        container.innerHTML = `<div class="no-results" style="padding:1rem; color:var(--text-muted); text-align:center;">${isEn ? 'No results found matching: ' : 'لم يتم العثور على نتائج تطابق: '}"${query}"</div>`;
+        return;
+      }
+
+      let html = '';
+      matches.slice(0, 15).forEach(item => {
+        const cTitle = isEn ? (item.courseTitleEn || item.moduleTitleEn || item.courseTitleAr) : (item.courseTitleAr || item.moduleTitleAr);
+        const lTitle = isEn ? (item.titleEn || item.titleAr) : item.titleAr;
+        html += `
+          <div class="search-item" style="padding: 0.85rem; border-bottom: 1px solid var(--border-card); cursor: pointer; transition: background 0.2s;" 
+               onclick="app.loadLesson('${item.id}'); app.closeModal('searchModal');"
+               onmouseover="this.style.background='rgba(79,70,229,0.1)'" 
+               onmouseout="this.style.background='transparent'">
+            <div style="font-size: 0.78rem; color: var(--accent-cyan); font-weight: 700;">${cTitle}</div>
+            <div style="font-size: 0.98rem; font-weight: 700; color: var(--text-main); margin-top: 2px;">${item.number} ${lTitle}</div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    };
+
+    // Student Auth Modal Helpers
+    function openStudentAuthModal() {
+      const nameInput = document.getElementById('authStudentName');
+      const emailInput = document.getElementById('authStudentEmail');
+      const avatarVal = document.getElementById('selectedAvatarValue');
+
+      if (nameInput) nameInput.value = app.student.name;
+      if (emailInput) emailInput.value = app.student.email;
+      if (avatarVal) avatarVal.value = app.student.avatar;
+
+      // Select active avatar button
+      document.querySelectorAll('.avatar-choice-btn').forEach(btn => {
+        btn.classList.toggle('selected', btn.getAttribute('data-avatar') === app.student.avatar);
+      });
+
+      app.openModal('studentAuthModal');
+    }
+
+    function selectAvatar(avatar, btn) {
+      document.querySelectorAll('.avatar-choice-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      const hiddenInput = document.getElementById('selectedAvatarValue');
+      if (hiddenInput) hiddenInput.value = avatar;
+    }
+
+    function handleSaveStudentAuth() {
+      const name = document.getElementById('authStudentName').value;
+      const email = document.getElementById('authStudentEmail').value;
+      const avatar = document.getElementById('selectedAvatarValue').value;
+      app.saveStudentProfile(name, email, avatar);
+    }
+
+    // Triage & OSINT in-page helpers
+    function renderTriageModalUI() {
+      const c = triageEngine.getCurrentCase();
+      const container = document.getElementById('triageCaseContainer');
+      if (!container || !c) return;
+
+      const isEn = typeof i18n !== 'undefined' && i18n.currentLang === 'en';
+      const caseTitle = isEn ? (c.titleEn || c.titleAr) : c.titleAr;
+      const tpBtnText = isEn ? '🔴 True Positive' : '🔴 هجوم حقيقي (True Positive)';
+      const fpBtnText = isEn ? '🟢 False Positive (Benign)' : '🟢 إنذار خاطئ مشروع (False Positive)';
+
+      container.innerHTML = `
+        <div class="ticket-challenge-card">
+          <div class="ticket-top-banner ${c.severity.toLowerCase()}">
+            <span class="ticket-badge-pill">${c.id}</span>
+            <span><strong>${caseTitle}</strong></span>
+            <span>${c.time}</span>
+          </div>
+          <div class="raw-log-container">
+            <pre class="raw-log-body">${c.rawLog}</pre>
+          </div>
+          <div class="ticket-action-bar" style="justify-content: center; gap: 1rem;">
+            <button class="btn-primary-glow" onclick="handleTriageSubmit(true)">${tpBtnText}</button>
+            <button class="btn-success-glow" onclick="handleTriageSubmit(false)">${fpBtnText}</button>
+          </div>
+          <div id="triageVerdictBox" class="ticket-feedback-box" style="display:none; margin-top: 1rem;"></div>
+        </div>
+      `;
+    }
+
+    function handleTriageSubmit(userChoice) {
+      const res = triageEngine.evaluateDecision(userChoice);
+      const box = document.getElementById('triageVerdictBox');
+      if (!box) return;
+      box.style.display = 'block';
+
+      const isEn = typeof i18n !== 'undefined' && i18n.currentLang === 'en';
+      const explanation = isEn && res.explanationEn ? res.explanationEn : res.explanationAr;
+
+      if (res.isCorrect) {
+        box.className = 'ticket-feedback-box correct';
+        box.innerHTML = `
+          <div class="feedback-title">${isEn ? '🎯 Outstanding and accurate verdict!' : '🎯 تقييم ممتاز ودقيق!'}</div>
+          <p>${explanation}</p>
+          <div style="margin-top: 8px; font-weight: bold; color: var(--accent-green);">
+            ${isEn ? `Current Score: ${res.score} / ${res.total}` : `النقاط الحالية: ${res.score} / ${res.total}`}
+          </div>
+        `;
+      } else {
+        box.className = 'ticket-feedback-box incorrect';
+        box.innerHTML = `
+          <div class="feedback-title">${isEn ? '⚠️ Inaccurate triage, review log context!' : '⚠️ تقييم غير دقيق، راجع تفاصيل السياق!'}</div>
+          <p>${explanation}</p>
+        `;
+      }
+
+      if (res.hasNext) {
+        setTimeout(() => {
+          triageEngine.nextCase();
+          renderTriageModalUI();
+        }, 3000);
+      }
+    }
+
+    function executeOsintLookup() {
+      const val = document.getElementById('osintInputField').value;
+      const res = lookupIOC(val);
+      const card = document.getElementById('osintResultCard');
+      if (!card || !res) return;
+      card.style.display = 'block';
+
+      const isEn = typeof i18n !== 'undefined' && i18n.currentLang === 'en';
+      const isMalicious = res.verdict === 'MALICIOUS';
+      const verdictTitle = isMalicious
+        ? (isEn ? '⚠️ Confirmed Malicious IOC' : '⚠️ إشارة خبيثة مؤكدة (Malicious IOC)')
+        : (isEn ? '✓ Safe or Unknown Indicator' : '✓ مؤشر آمن أو غير معروف');
+
+      card.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.75rem;">
+          <h4 style="color: ${isMalicious ? 'var(--accent-red)' : 'var(--accent-green)'};">
+            ${verdictTitle}
+          </h4>
+          <span class="badge-pill" style="background: ${isMalicious ? 'rgba(255,51,102,0.2)' : 'rgba(0,255,136,0.2)'}; color:${isMalicious ? 'var(--accent-red)' : 'var(--accent-green)'}; font-weight:bold; padding: 4px 8px; border-radius:4px;">
+            ${res.verdict}
+          </span>
+        </div>
+        <p><strong>IOC:</strong> <code>${res.input}</code></p>
+        <p><strong>Abuse Confidence:</strong> ${res.abuseConfidence}%</p>
+        <p><strong>VirusTotal Detection:</strong> ${res.vtDetections}</p>
+        <p><strong>Threat Category:</strong> ${res.threatCategory}</p>
+        ${res.country ? `<p><strong>Location:</strong> ${res.country} (${res.isp || ''})</p>` : ''}
+      `;
+    }
+
+    // Hook modal open for triage
+    const originalAppOpenModal = app.openModal.bind(app);
+    app.openModal = function(id) {
+      originalAppOpenModal(id);
+      if (id === 'triageModal') renderTriageModalUI();
+    };
+  </script>
+</body>
+</html>
